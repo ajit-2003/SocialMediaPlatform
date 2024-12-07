@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4EA685;
+            --secondary-color: #57B894;
+            --background-color: #f9f9f9;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-picture {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .profile-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-info h3 {
+            margin: 5px 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form div {
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        input[type="text"],
+        input[type="url"],
+        textarea {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+        }
+
+        input[type="text"]:focus,
+        input[type="url"]:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            position: absolute;
+            bottom: -20px;
+        }
+
+        .back-button {
+            background-color: #e0e0e0;
+            color: #333;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            background-color: #d0d0d0;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Profile</h2>
+<div class="form-container">
+    <div class="profile-header">
+        <!-- Display profile picture if it exists -->
+        {% if user.profile.profile_picture %}
+            <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+        {% else %}
+            <img src="default-profile-pic.png" alt="Default Profile Picture" class="profile-picture">
+        {% endif %}
+        <div class="profile-info">
+            <h3>{{ user.username }}</h3>
+            <p>{{ user.profile.bio }}</p>
+            <p><a href="{{ user.profile.website }}">{{ user.profile.website }}</a></p>
+        </div>
+    </div>
+
+    <form id="profile-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <div>{{ u_form.as_p }}</div>
+            <div class="error-message" id="u_form_error"></div>
+        </div>
+        <div class="form-group">
+            <div>{{ p_form.as_p }}</div>
+            <div class="error-message" id="p_form_error"></div>
+        </div>
+        <button type="submit">Update Profile</button>
+    </form>
+
+    <button class="back-button" onclick="window.location.href='{% url 'core:home' %}'">Back to Home</button>
+</div>
+
+<script>
+    document.getElementById('profile-form').addEventListener('submit', function(event) {
+        let isValid = true;
+
+        // Example validation for required fields
+        const uFormFields = document.querySelectorAll('#u_form input, #u_form textarea');
+        const pFormFields = document.querySelectorAll('#p_form input, #p_form textarea');
+
+        uFormFields.forEach(field => {
+            if (field.value.trim() === '') {
+                isValid = false;
+                document.getElementById('u_form_error').textContent = 'Please fill out all fields.';
+            }
+        });
+
+        pFormFields.forEach(field => {
+            if (field.value.trim() === '') {
+                isValid = false;
+                document.getElementById('p_form_error').textContent = 'Please fill out all fields.';
+            }
+        });
+
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+</script>
+
+</body>
+</html>

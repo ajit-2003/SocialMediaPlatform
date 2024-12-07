@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Group Chat</title>
+    <style>
+        :root {
+            --primary-color: #4EA685;
+            --secondary-color: #57B894;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #messages {
+            border: 1px solid var(--primary-color);
+            height: 300px;
+            overflow-y: auto;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 5px;
+            border: 1px solid var(--primary-color);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat in Group: {{ group.name }}</h1>
+    <div id="messages">
+        {% for message in messages %}
+            <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+        {% endfor %}
+    </div>
+    <input type="text" id="message-input" placeholder="Type a message">
+    <button id="send-button">Send</button>
+</body>
+</html>

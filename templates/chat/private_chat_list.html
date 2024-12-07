@@ -1,0 +1,92 @@
+<!-- chat/templates/chat/private_chat_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Chat - Select User</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Arial', sans-serif;
+        }
+        .chat-list-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .chat-header {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            color: #4EA685;
+        }
+        .user-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .user-list li {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        .user-list li:hover {
+            background-color: #57B894;
+            cursor: pointer;
+        }
+        .user-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-left: 15px;
+            color: #333;
+        }
+        .user-list .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+        }
+        .user-list li:hover .user-name {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-list-container">
+    <div class="chat-header">
+        <h2>Select a User for Private Chat</h2>
+        <p>Click on a user's name to start chatting!</p>
+    </div>
+
+    <ul class="user-list">
+        {% for user in users %}
+            <li>
+                <div class="icon">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <a href="{% url 'chat:send_private_message' user_id=user.id %}" class="user-name">
+                    {{ user.username }}
+                </a>
+            </li>
+        {% empty %}
+            <li>No users available for private chat.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html>
